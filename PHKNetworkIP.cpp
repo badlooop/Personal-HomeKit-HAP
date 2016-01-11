@@ -586,7 +586,8 @@ void connectionInfo::handlePairSeup() {
                         
                         PHKNetworkMessageDataRecord tlv8Record;
                         tlv8Record.data = new char[tlv8Len+16];tlv8Record.length = tlv8Len+16;
-                        bzero(tlv8Record.data, tlv8Record.length);
+                        tlv8Record.activate = false; tlv8Record.index = 0;
+			bzero(tlv8Record.data, tlv8Record.length);
                         {
                             
                             chacha20_ctx ctx;   bzero(&ctx, sizeof(ctx));
@@ -647,6 +648,9 @@ void connectionInfo::handlePairSeup() {
 void connectionInfo::handlePairVerify() {
     bool end = false;
     char state = State_Pair_Verify_M1;
+
+    numberOfMsgRec = 0; //Mod by chen
+    numberOfMsgSend = 0;    
     
     curved25519_key secretKey;
     curved25519_key publicKey;

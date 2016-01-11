@@ -79,19 +79,21 @@ public:
 
 class PHKNetworkMessageDataRecord {
 public:
-    unsigned char index = 0;
-    char *data = 0;
-    unsigned int length = 0;
-    bool activate = false;
+    unsigned char index;
+    char *data;
+    unsigned int length;
+    bool activate;
     ~PHKNetworkMessageDataRecord();
     PHKNetworkMessageDataRecord &operator=(const PHKNetworkMessageDataRecord&);
 };
 
 class PHKNetworkMessageData {
     PHKNetworkMessageDataRecord records[10];
-    unsigned char count = 0;
+    unsigned char count;
 public:
-    PHKNetworkMessageData() {}
+    PHKNetworkMessageData() {
+	 count = 0;
+    }
     PHKNetworkMessageData(const char *rawData, unsigned short len);
     PHKNetworkMessageData(const PHKNetworkMessageData &data);
     PHKNetworkMessageData &operator=(const PHKNetworkMessageData &);
@@ -124,16 +126,24 @@ public:
 
 class connectionInfo {
 public:
+    connectionInfo(){
+	numberOfMsgRec = 0;
+        numberOfMsgSend = 0;
+        subSocket = -1;
+ 	connected = false;
+    }
+
+
     pthread_t thread;
     pthread_mutex_t mutex;
 
-    bool connected = false;
+    bool connected;
 
     uint8_t controllerToAccessoryKey[32];
     uint8_t accessoryToControllerKey[32];
-    unsigned long long numberOfMsgRec = 0;
-    unsigned long long numberOfMsgSend = 0;
-    int subSocket = -1;
+    unsigned long long numberOfMsgRec;
+    unsigned long long numberOfMsgSend;
+    int subSocket;
     char buffer[4096];
 
     void *notificationList[numberOfNotifiableValue];
